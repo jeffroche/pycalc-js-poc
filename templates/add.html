@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block body %}
+<div class="row-fluid">
+  <div class="span6">
+    <form action="" method=post class="form-inline">
+      <input type="text" placeholder="Num 1" name="num1" class="input-small">
+      <input type="text" placeholder="Num 2" name="num2" class="input-small">
+      <input type="hidden" name="key" value="{{ key }}">
+      <button type="submit" class="btn">Calculate</button>
+    </form>
+  </div>
+  <div class="span6">
+    <p class="output-large" id="output">
+    </p>
+  </div>
+</div>
+{% endblock %}
+{% block js %}
+  <script type="text/javascript">
+
+    $( 'form' ).submit(function( event ) {
+      event.preventDefault();
+
+      var form = $( this );
+
+      $.ajax({
+        type: 'POST',
+        url: '/add',
+        data: form.serialize(),
+        dataType: 'json',
+        success: function( resp ) {
+          $('#output').html(resp.data);
+          console.log( resp );
+        },
+        error: function(resp) {
+          $('#output').html('');
+          console.log( resp );
+        }
+      });
+    });
+
+  </script>
+{% endblock %}
