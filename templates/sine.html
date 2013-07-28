@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block body %}
+<div class="row-fluid">
+  <div class="span6">
+    <form action="" method=post class="form-inline">
+      <input type="text" placeholder="Magnitude" name="mag" class="input-small">
+      <input type="text" placeholder="Period [rad]" name="period" class="input-small">
+      <button type="submit" class="btn">Calculate</button>
+    </form>
+  </div>
+  <div class="span6">
+    <p class="output-large" id="output">
+    </p>
+  </div>
+</div>
+{% endblock %}
+{% block js %}
+  <script type="text/javascript">
+
+    $( 'form' ).submit(function( event ) {
+      event.preventDefault();
+
+      var form = $( this );
+
+      $.ajax({
+        type: 'POST',
+        url: '/sine',
+        data: form.serialize(),
+        dataType: 'json',
+        success: function( resp ) {
+          $('#output').html(resp.data);
+          console.log( resp );
+        },
+        error: function(resp) {
+          $('#output').html('');
+          console.log( resp );
+        }
+      });
+    });
+
+  </script>
+{% endblock %}

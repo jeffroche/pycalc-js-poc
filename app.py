@@ -1,7 +1,7 @@
 from flask import Flask
 from flask import request
 from flask import render_template
-from calc import add_two_numbers
+from calc import add_two_numbers, sine_wave
 import json
 import helpers
 
@@ -36,7 +36,17 @@ def add():
         return render_template('add.html', key=helpers.id_generator(size=9))
 
 
-
+@app.route('/sine', methods=['POST', 'GET'])
+def sine():
+    """
+    Generates a sine wave
+    """
+    if request.method == 'POST':
+        res = sine_wave(magnitude=float(request.form['mag']),
+                        period=float(request.form['period']))
+        return json.dumps({'data': res})
+    else:
+        return render_template('sine.html')
 
 
 if __name__ == '__main__':
