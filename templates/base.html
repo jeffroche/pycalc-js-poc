@@ -8,13 +8,15 @@
     <link href="{{ url_for('static', filename='css/pycalc.css') }}" rel="stylesheet" media="screen">
   </head>
   <body>
+    {% block js_top %}
+    {% endblock %}
     <div class="container">
     {% block body %}
     {% endblock %}
     </div>
     <script src="http://code.jquery.com/jquery.js"></script>
     <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
-    {% block js %}
+    {% block js_bottom %}
     {% endblock %}
   </body>
 </html>
