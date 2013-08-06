@@ -42,9 +42,9 @@ def sine():
     Generates a sine wave
     """
     if request.method == 'POST':
-        res = sine_wave(magnitude=float(request.form['mag']),
-                        period=float(request.form['period']))
-        return json.dumps({'data': res})
+        (x, y) = sine_wave(magnitude=float(request.form['mag']),
+                           period=float(request.form['period']))
+        return json.dumps({'data': {'x': x, 'y': y}})
     else:
         return render_template('sine.html')
 

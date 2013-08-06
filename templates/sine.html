@@ -3,18 +3,10 @@
   <script type="text/javascript" src="https://www.google.com/jsapi"></script>
   <script type="text/javascript">
       google.load("visualization", "1", {packages:["corechart"]});
-      google.setOnLoadCallback(drawChart);
-      function drawChart() {
-        var data = google.visualization.arrayToDataTable([
-          ['Year', 'Sales', 'Expenses'],
-          ['2004',  1000,      400],
-          ['2005',  1170,      460],
-          ['2006',  660,       1120],
-          ['2007',  1030,      540]
-        ]);
-
+      function drawChart(dataIn) {
+        var data = google.visualization.arrayToDataTable(dataIn);
+        console.log('Chart data:', dataIn);
         var options = {
-          title: 'Company Performance'
         };
 
         var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
@@ -27,8 +19,10 @@
 <div class="row-fluid">
   <div class="span6">
     <form action="" method=post class="form-inline">
-      <input type="text" placeholder="Magnitude" name="mag" class="input-small">
-      <input type="text" placeholder="Period [rad]" name="period" class="input-small">
+      <label>Magnitude:</label>
+      <input type="number" name="mag" class="input-small" value="1" max="5" min="0.2" step="0.2">
+      <label>Period:</label>
+      <input type="number" name="period" class="input-small" value="1" max="5" min="0.2" step="0.2">
       <button type="submit" class="btn">Calculate</button>
     </form>
   </div>
@@ -55,7 +49,7 @@
         data: form.serialize(),
         dataType: 'json',
         success: function( resp ) {
-          $('#output').html(resp.data);
+          drawChart(formatDataForGoogleChart(resp.data.x,resp.data.y,'X','Y'));
           console.log( resp );
         },
         error: function(resp) {
