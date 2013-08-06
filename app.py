@@ -1,6 +1,7 @@
 from flask import Flask
 from flask import request
 from flask import render_template
+from flask import abort
 from calc import add_two_numbers, sine_wave
 import json
 import helpers
@@ -27,11 +28,11 @@ def add():
         try:
             res = add_two_numbers(float(request.form['num1']),
                                   float(request.form['num2']))
+            return json.dumps({'data': res})
         except ValueError:
             app.logger.warning('Bad add calc. Num1: %s Num2: %s' % (
                                request.form['num1'], request.form['num2']))
-            res = {}
-        return json.dumps({'data': res})
+            return abort(400)
     else:
         return render_template('add.html', key=helpers.id_generator(size=9))
 
@@ -42,9 +43,14 @@ def sine():
     Generates a sine wave
     """
     if request.method == 'POST':
-        (x, y) = sine_wave(magnitude=float(request.form['mag']),
-                           period=float(request.form['period']))
-        return json.dumps({'data': {'x': x, 'y': y}})
+        try:
+            (x, y) = sine_wave(magnitude=float(request.form['mag']),
+                               period=float(request.form['period']))
+            return json.dumps({'data': {'x': x, 'y': y}})
+        except ValueError:
+            app.logger.warning('Bad sine calc. Mag: %s Period %s' % (
+                               request.form['mag'], request.form['period']))
+            return abort(400)
     else:
         return render_template('sine.html')
 
