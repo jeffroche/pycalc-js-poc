@@ -23,7 +23,6 @@
       <input type="number" name="mag" class="input-small" value="1" max="5" min="0.2" step="0.2">
       <label>Period:</label>
       <input type="number" name="period" class="input-small" value="1" max="5" min="0.2" step="0.2">
-      <button type="submit" class="btn">Calculate</button>
     </form>
   </div>
   <div class="span6">
@@ -38,10 +37,12 @@
 {% block js_bottom %}
   <script type="text/javascript">
 
-    $( 'form' ).submit(function( event ) {
-      event.preventDefault();
+    $( 'input[type="number"]' ).change(function(event) {
+      recalculate();
+    });
 
-      var form = $( this );
+    function recalculate() {
+      var form = $( 'form' );
 
       $.ajax({
         type: 'POST',
@@ -57,7 +58,7 @@
           console.log( resp );
         }
       });
-    });
+    };
 
   </script>
    <script src="{{ url_for('static', filename='js/pycalc.js') }}"></script>
