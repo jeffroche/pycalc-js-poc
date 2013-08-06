@@ -5,10 +5,17 @@ from flask import abort
 from calc import add_two_numbers, sine_wave
 import json
 import helpers
+import os
 
 
 app = Flask(__name__)
-app.debug = True
+
+HEROKU = 'HEROKU' in os.environ
+
+if HEROKU:
+    app.debug = False
+else:
+    app.debug = True
 
 
 @app.route('/')
